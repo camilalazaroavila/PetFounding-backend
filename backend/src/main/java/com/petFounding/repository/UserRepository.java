@@ -1,16 +1,14 @@
 package com.petFounding.repository;
 
 import com.petFounding.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
-public interface UserRepository {
-    User guardar(User usuario);
-    User modificar(User usuario);
-    void eliminar(Long id);
-    User buscarPorId(Long id);
-    User buscarPorEmail(String email);
-    User buscarPorEmailYPassword(String email, String password);
-    List<User> buscarTodos();
-    Boolean existePorEmail(String email);
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByEmail(String email);
+    Optional<User> findByEmailAndPassword(String email, String password);
+    Boolean existsByEmail(String email);
 }

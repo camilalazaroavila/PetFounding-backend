@@ -1,6 +1,5 @@
 package com.petFounding.service;
 
-
 import com.petFounding.entity.AdoptionApplication;
 import com.petFounding.entity.Pet;
 import com.petFounding.entity.User;
@@ -19,8 +18,8 @@ import java.util.List;
 @Transactional
 public class AdoptionApplicationServiceImpl implements AdoptionApplicationService {
 
-    private AdoptionApplicationRepository adoptionApplicationRepository;
-    private PetRepository petRepository;
+    private final AdoptionApplicationRepository adoptionApplicationRepository;
+    private final PetRepository petRepository;
 
     @Autowired
     public AdoptionApplicationServiceImpl(AdoptionApplicationRepository adoptionApplicationRepository,
@@ -31,22 +30,19 @@ public class AdoptionApplicationServiceImpl implements AdoptionApplicationServic
 
     @Override
     public AdoptionApplication crear(AdoptionApplication solicitud) {
-        if (adoptionApplicationRepository.existePorAdoptanteYMascota(
+        if (adoptionApplicationRepository.existsByAdoptanteAndMascota(
                 solicitud.getAdoptante(), solicitud.getMascota())) {
             throw new RuntimeException("Ya existe una solicitud para esta mascota");
         }
 
         solicitud.setFechaSolicitud(LocalDate.now());
-        return adoptionApplicationRepository.guardar(solicitud);
+        return adoptionApplicationRepository.save(solicitud);
     }
 
     @Override
     public AdoptionApplication aprobar(Long id) {
-        AdoptionApplication solicitud = adoptionApplicationRepository.buscarPorId(id);
-
-        if (solicitud == null) {
-            throw new RuntimeException("Solicitud no encontrada");
-        }
+        AdoptionApplication solicitud = adoptionApplicationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
 
         solicitud.setFechaRta(LocalDate.now());
 
@@ -54,58 +50,46 @@ public class AdoptionApplicationServiceImpl implements AdoptionApplicationServic
         mascota.setEstadoAdopcion(AdoptionStatus.ADOPTADO);
         petRepository.save(mascota);
 
-
-        return adoptionApplicationRepository.modificar(solicitud);
+        return adoptionApplicationRepository.save(solicitud);
     }
 
     @Override
     public AdoptionApplication rechazar(Long id, String comentario) {
-        AdoptionApplication solicitud = adoptionApplicationRepository.buscarPorId(id);
-
-        if (solicitud == null) {
-            throw new RuntimeException("Solicitud no encontrada");
-        }
+        AdoptionApplication solicitud = adoptionApplicationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
 
         solicitud.setFechaRta(LocalDate.now());
         solicitud.setComentarioRefugio(comentario);
 
-        return adoptionApplicationRepository.modificar(solicitud);
+        return adoptionApplicationRepository.save(solicitud);
     }
 
     @Override
     public void cancelar(Long id) {
-        AdoptionApplication solicitud = adoptionApplicationRepository.buscarPorId(id);
-
-        if (solicitud == null) {
+        if (!adoptionApplicationRepository.existsById(id)) {
             throw new RuntimeException("Solicitud no encontrada");
         }
-
-        adoptionApplicationRepository.eliminar(id);
+        adoptionApplicationRepository.deleteById(id);
     }
 
     @Override
     public AdoptionApplication obtenerPorId(Long id) {
-        AdoptionApplication solicitud = adoptionApplicationRepository.buscarPorId(id);
-
-        if (solicitud == null) {
-            throw new RuntimeException("Solicitud no encontrada");
-        }
-
-        return solicitud;
+        return adoptionApplicationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
     }
 
     @Override
     public List<AdoptionApplication> obtenerSolicitudesPorAdoptante(User adoptante) {
-        return adoptionApplicationRepository.buscarPorAdoptante(adoptante);
+        return adoptionApplicationRepository.findByAdoptante(adoptante);
     }
 
     @Override
     public List<AdoptionApplication> obtenerSolicitudesPorMascota(Pet mascota) {
-        return adoptionApplicationRepository.buscarPorMascota(mascota);
+        return adoptionApplicationRepository.findByMascota(mascota);
     }
 
     @Override
     public Boolean existeSolicitud(User adoptante, Pet mascota) {
-        return adoptionApplicationRepository.existePorAdoptanteYMascota(adoptante, mascota);
+        return adoptionApplicationRepository.existsByAdoptanteAndMascota(adoptante, mascota);
     }
 }

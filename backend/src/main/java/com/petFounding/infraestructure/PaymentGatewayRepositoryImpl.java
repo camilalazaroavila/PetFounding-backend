@@ -1,4 +1,4 @@
-package com.petFounding.infraestructure;
+/*package com.petFounding.infraestructure;
 
 import com.petFounding.entity.Donation;
 import com.petFounding.entity.PaymentGateway;
@@ -57,4 +57,4 @@ public class PaymentGatewayRepositoryImpl implements PaymentGatewayRepository {
 
         return null;
     }
-}
+}*/

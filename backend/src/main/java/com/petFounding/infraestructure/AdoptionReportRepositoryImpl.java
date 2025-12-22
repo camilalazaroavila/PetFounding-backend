@@ -1,4 +1,4 @@
-package com.petFounding.infraestructure;
+/*package com.petFounding.infraestructure;
 
 import com.petFounding.entity.AdoptionReport;
 import com.petFounding.entity.Shelter;
@@ -59,4 +59,4 @@ public class AdoptionReportRepositoryImpl implements AdoptionReportRepository {
         // TODO:buscar todos los reportes q se muetsre e una lista dsp
         return null;
     }
-}
+}*/

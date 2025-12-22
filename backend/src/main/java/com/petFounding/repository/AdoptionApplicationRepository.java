@@ -4,15 +4,14 @@ import com.petFounding.entity.AdoptionApplication;
 import com.petFounding.entity.Pet;
 import com.petFounding.entity.User;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
-public interface AdoptionApplicationRepository {
-    AdoptionApplication guardar(AdoptionApplication solicitud);
-    AdoptionApplication modificar(AdoptionApplication solicitud);
-    void eliminar(Long id);
-    AdoptionApplication buscarPorId(Long id);
-    List<AdoptionApplication> buscarPorAdoptante(User adoptante);
-    List<AdoptionApplication> buscarPorMascota(Pet mascota);
-    Boolean existePorAdoptanteYMascota(User adoptante, Pet mascota);
-    List<AdoptionApplication> buscarTodos();
+@Repository
+public interface AdoptionApplicationRepository extends JpaRepository<AdoptionApplication, Long> {
+    List<AdoptionApplication> findByAdoptante(User adoptante);
+    List<AdoptionApplication> findByMascota(Pet mascota);
+    Boolean existsByAdoptanteAndMascota(User adoptante, Pet mascota);
 }

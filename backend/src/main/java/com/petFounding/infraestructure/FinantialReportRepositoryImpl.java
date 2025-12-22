@@ -1,4 +1,4 @@
-package com.petFounding.infraestructure;
+/*package com.petFounding.infraestructure;
 
 import com.petFounding.entity.FinancialReport;
 import com.petFounding.entity.Shelter;
@@ -62,3 +62,5 @@ public class FinantialReportRepositoryImpl implements FinantialReportRepository{
         return null;
     }
 }
+
+ */

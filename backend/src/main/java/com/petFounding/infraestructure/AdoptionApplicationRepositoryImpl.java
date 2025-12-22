@@ -1,4 +1,4 @@
-package com.petFounding.infraestructure;
+/*package com.petFounding.infraestructure;
 
 import com.petFounding.entity.AdoptionApplication;
 import com.petFounding.entity.Pet;
@@ -65,4 +65,4 @@ public class AdoptionApplicationRepositoryImpl implements AdoptionApplicationRep
         // TODO: buscar solicitudes
         return null;
     }
-}
+}*/

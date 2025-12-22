@@ -17,7 +17,7 @@ import java.util.List;
 @Transactional
 public class DonationServiceImpl implements DonationService {
 
-    private DonationRepository donationRepository;
+    private final DonationRepository donationRepository;
 
     @Autowired
     public DonationServiceImpl(DonationRepository donationRepository) {
@@ -26,73 +26,60 @@ public class DonationServiceImpl implements DonationService {
 
     @Override
     public Donation processar(Donation donacion) {
-        // TODO: Implementar la logica d la donacion
-        // 1 mono > 0
-        // 2 generar Id con la ransaccion d l momento
-        // 3 guadar fecha
+        if (donacion.getMonto() == null || donacion.getMonto().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RuntimeException("El monto de la donación debe ser mayor a cero");
+        }
+
         donacion.setFecha(LocalDate.now());
-        // 4. guardar donacion en bd
-        return donationRepository.guardar(donacion);
+        return donationRepository.save(donacion);
     }
 
     @Override
     public Donation confirmar(Long id) {
-        // TODO:logica d confirmacion
-        // 1 buscar por id
-        Donation donacion = donationRepository.buscarPorId(id);
-        // 2 cheque el pago verificado con la pasarela d pago
-        // 3 set el estado de la donacion
-        // 4 en el controller mandar msj de confirmacion
-        return donacion;
+        Donation donacion = donationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Donación no encontrada"));
+
+        // Aquí iría la lógica con la pasarela (ej: Mercado Pago)
+        // donacion.setEstado(EstadoDonacion.CONFIRMADA);
+
+        return donationRepository.save(donacion);
     }
 
     @Override
     public Donation cancelar(Long id) {
-        // TODO: cancelar/eliminar
-        // 1 buscamos por id
-        Donation donacion = donationRepository.buscarPorId(id);
-        // 2 cheuqeamos q exirrta
-        // 3 y endria haber un reembolso pero ni idea
-        // 4 set estado d donacion
-        return donacion;
+        Donation donacion = donationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Donación no encontrada"));
+
+        return donationRepository.save(donacion);
     }
 
     @Override
     public Donation generarRecibo(Long id) {
-        // TODO: opcional, pq mp ya t lo da
-        Donation donacion = donationRepository.buscarPorId(id);
-        if (donacion == null) {
-            throw new RuntimeException("Donación no encontrada");
-        }
-        return donacion;
+        return donationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Donación no encontrada"));
     }
 
     @Override
     public List<Donation> obtenerDonacionesPorUsuario(User usuario) {
-        return donationRepository.buscarPorUsuario(usuario);
+        return donationRepository.findByUsuario(usuario);
     }
 
     @Override
     public List<Donation> obtenerDonacionesPorRefugio(Shelter refugio) {
-        return donationRepository.buscarPorRefugio(refugio);
+        return donationRepository.findByRefugio(refugio);
     }
 
     @Override
     public List<Donation> obtenerDonacionesPorFecha(LocalDate fechaInicio, LocalDate fechaFin) {
-        return donationRepository.buscarPorFecha(fechaInicio, fechaFin);
+        return donationRepository.findByFechaBetween(fechaInicio, fechaFin);
     }
 
     @Override
     public BigDecimal calcularTotalRecaudado(Shelter refugio) {
-        // TODO: total
-        // 1 buscamos por id o buscamos un array de las donciones y llamamos a los numeros para sumar
-        List<Donation> donaciones = donationRepository.buscarPorRefugio(refugio);
-        // 2 sumar todos
-        BigDecimal total = BigDecimal.ZERO;
-        for (Donation donacion : donaciones) {
-            total = total.add(donacion.getMonto());
-        }
-        // 3 return resultado
-        return total;
+        List<Donation> donaciones = donationRepository.findByRefugio(refugio);
+
+        return donaciones.stream()
+                .map(Donation::getMonto)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

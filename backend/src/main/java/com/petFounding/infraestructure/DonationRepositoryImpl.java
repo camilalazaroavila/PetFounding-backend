@@ -1,4 +1,4 @@
-package com.petFounding.infraestructure;
+/*package com.petFounding.infraestructure;
 
 import com.petFounding.entity.Donation;
 import com.petFounding.entity.Shelter;
@@ -66,4 +66,4 @@ public class DonationRepositoryImpl implements DonationRepository {
         // TODO: buscar donaciones
         return null;
     }
-}
+}*/
