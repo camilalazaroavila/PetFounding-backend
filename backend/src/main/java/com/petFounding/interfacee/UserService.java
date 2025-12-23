@@ -17,4 +17,4 @@ public interface UserService {
         User obtenerUsuarioPorEmail(String email) throws UsuarioInexistenteException;
         List<User> obtenerTodosLosUsuarios();
         Boolean existeEmail(String email);
-    }
+}
