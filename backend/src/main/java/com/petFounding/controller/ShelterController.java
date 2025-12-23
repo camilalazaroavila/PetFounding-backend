@@ -43,8 +43,7 @@ public class ShelterController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Shelter> updateShelter(@PathVariable Long id, @RequestBody @Valid ShelterValid datos) {
-        Shelter nuevosDatos = new Shelter(datos);
-        Shelter shelterActualizado = shelterService.actualizarRefugio(id, nuevosDatos);
+        Shelter shelterActualizado = shelterService.actualizarRefugio(id, datos);
         return ResponseEntity.ok(shelterActualizado);
     }
 

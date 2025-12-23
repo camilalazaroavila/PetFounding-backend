@@ -5,6 +5,7 @@ import com.petFounding.entity.Shelter;
 import com.petFounding.interfacee.ShelterService;
 import com.petFounding.repository.PetRepository;
 import com.petFounding.repository.ShelterRepository;
+import com.petFounding.valid.ShelterValid;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,12 +34,11 @@ public class ShelterServiceImpl implements ShelterService {
     }
 
     @Override
-    public Shelter actualizarRefugio(Long id, Shelter refugio) {
+    public Shelter actualizarRefugio(Long id, ShelterValid refugio) {
         Shelter existente = shelterRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Refugio no encontrado con ID: " + id));
 
-        existente.setNombreRefugio(refugio.getNombreRefugio());
-        existente.setDireccion(refugio.getDireccion());
+        existente.actualizarDatos(refugio);
 
         return shelterRepository.save(existente);
     }
