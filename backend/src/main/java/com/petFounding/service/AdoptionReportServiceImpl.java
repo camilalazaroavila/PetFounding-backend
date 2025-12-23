@@ -39,7 +39,7 @@ public class AdoptionReportServiceImpl implements AdoptionReportService {
     public AdoptionReport generar(Shelter refugio, LocalDate periodo) {
         //TODO: lo mismo acá o hacerlo manualemtne
         List<AdoptionApplication> solicitudes =
-                adoptionApplicationRepository.buscarTodos();
+                adoptionApplicationRepository.findAll();
 
         int mascotasAdoptadas = 0;
         int solicitudesPendientes = 0;
@@ -55,7 +55,7 @@ public class AdoptionReportServiceImpl implements AdoptionReportService {
         );
         reporte.setRefugio(refugio);
 
-        return adoptionReportRepository.guardar(reporte);
+        return adoptionReportRepository.save(reporte);
     }
 
     @Override

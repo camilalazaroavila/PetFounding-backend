@@ -1,6 +1,5 @@
 package com.petFounding.service;
 
-
 import com.petFounding.entity.Donation;
 import com.petFounding.entity.PaymentGateway;
 import com.petFounding.interfacee.PaymentGatewayService;
@@ -15,7 +14,7 @@ import java.util.List;
 @Transactional
 public class PaymentGatewayServiceImpl implements PaymentGatewayService {
 
-    private PaymentGatewayRepository paymentGatewayRepository;
+    private final PaymentGatewayRepository paymentGatewayRepository;
 
     @Autowired
     public PaymentGatewayServiceImpl(PaymentGatewayRepository paymentGatewayRepository) {
@@ -24,54 +23,45 @@ public class PaymentGatewayServiceImpl implements PaymentGatewayService {
 
     @Override
     public PaymentGateway crearPreferencia(PaymentGateway pasarela) {
-        // TODO: Implementar integración con Mercado Pago
-        // 1. Crear preferencia de pago en Mercado Pago
-        // 2. Obtener el token de la preferencia
-        // 3. Guardar los datos de la pasarela
-        return paymentGatewayRepository.guardar(pasarela);
+        // TODO: Integración con Mercado Pago SDK
+        // 1. Crear PreferenceClient
+        // 2. Ejecutar client.create(request)
+        // 3. pasarela.setPaymentId(response.getId())
+
+        // Adaptado: save() reemplaza a guardar()
+        return paymentGatewayRepository.save(pasarela);
     }
 
     @Override
     public PaymentGateway procesarPago(String paymentId) {
-        // TODO: Implementar procesamiento de pago
-        // 1. Buscar la pasarela por paymentId
-        PaymentGateway pasarela = paymentGatewayRepository.buscarPorPaymentId(paymentId);
-        if (pasarela == null) {
-            throw new RuntimeException("Pasarela no encontrada");
-        }
-        // 2. Consultar el estado del pago en Mercado Pago
-        // 3. Actualizar el estado de la pasarela
-        // 4. Si el pago fue exitoso, confirmar la donación asociada
-        return paymentGatewayRepository.modificar(pasarela);
+        // Adaptado: findByPaymentId con Optional
+        PaymentGateway pasarela = paymentGatewayRepository.findByPaymentId(paymentId)
+                .orElseThrow(() -> new RuntimeException("Pasarela no encontrada con ID: " + paymentId));
+
+        // TODO: Consultar SDK de Mercado Pago para validar estado (approved, pending, rejected)
+
+        // Adaptado: save() reemplaza a modificar()
+        return paymentGatewayRepository.save(pasarela);
     }
 
     @Override
     public PaymentGateway verificarEstado(String paymentId) {
-        // TODO: Implementar verificación de estado
-        // 1. Buscar la pasarela por paymentId
-        PaymentGateway pasarela = paymentGatewayRepository.buscarPorPaymentId(paymentId);
-        if (pasarela == null) {
-            throw new RuntimeException("Pasarela no encontrada");
-        }
-        // 2. Consultar el estado actual en Mercado Pago
-        // 3. Actualizar el estado localmente si cambió
-        return pasarela;
+        // Adaptado: findByPaymentId
+        return paymentGatewayRepository.findByPaymentId(paymentId)
+                .orElseThrow(() -> new RuntimeException("Pasarela no encontrada"));
     }
 
     @Override
     public PaymentGateway obtenerHistorial(Long id) {
-        // TODO: Implementar obtención de historial
-        // 1. Buscar la pasarela por ID
-        PaymentGateway pasarela = paymentGatewayRepository.buscarPorId(id);
-        if (pasarela == null) {
-            throw new RuntimeException("Pasarela no encontrada");
-        }
-        // 2. Obtener todos los movimientos asociados
-        return pasarela;
+        /* Nota: getReferenceById es para carga perezosa (Lazy).
+           Para obtener los datos reales y validar existencia, usamos findById.
+        */
+        return paymentGatewayRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pasarela no encontrada"));
     }
 
     @Override
     public List<PaymentGateway> obtenerPorDonacion(Donation donacion) {
-        return paymentGatewayRepository.buscarPorDonacion(donacion);
+        return paymentGatewayRepository.findByDonacion(donacion);
     }
 }

@@ -1,4 +1,4 @@
-package com.petFounding.infraestructure;
+/*package com.petFounding.infraestructure;
 
 import com.petFounding.entity.User;
 import com.petFounding.repository.UserRepository;
@@ -76,4 +76,4 @@ public class UserRepositoryImpl implements UserRepository {
                 .uniqueResult();
         return count > 0;
     }
-}
+}*/
