@@ -1,10 +1,8 @@
 package com.petFounding.controller;
 
 import com.petFounding.entity.Pet;
-import com.petFounding.repository.PetRepository;
+import com.petFounding.interfacee.PetService;
 import com.petFounding.valid.PetValid;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,19 +19,18 @@ import java.net.URI;
 public class PetController {
 
     @Autowired
-    private PetRepository repository;
+    private PetService petService;
 
     @GetMapping
     public ResponseEntity<Page<Pet>> listaPets(@PageableDefault(size=6) Pageable pag){
-        return ResponseEntity.ok(repository.findAll(pag));
+        return ResponseEntity.ok(petService.obtenerTodasLasMascotas(pag));
     }
 
     @PostMapping
-    @Transactional
     public ResponseEntity<Pet> agregarPet(@RequestBody @Valid PetValid datos, UriComponentsBuilder uriBuilder){
         Pet pet = new Pet(datos);
 
-        Pet petSave = repository.save(pet);
+        Pet petSave = petService.crearMascota(pet, pet.getRefugio().getId());
 
         URI uri = uriBuilder.path("/pets/{id}").buildAndExpand(petSave.getId()).toUri();
         return ResponseEntity.created(uri).body(petSave);
@@ -41,30 +38,19 @@ public class PetController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Pet> detallesPet(@PathVariable Long id) {
-        Pet pet = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Mascota no encontrada"));
+        Pet pet = petService.obtenerMascotaPorId(id);
         return ResponseEntity.ok(pet);
     }
 
     @PutMapping("/{id}")
-    @Transactional
     public ResponseEntity<Pet> updatePet(@PathVariable Long id, @RequestBody @Valid PetValid datos) {
-        Pet pet = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Mascota no encontrada para actualizar"));
-        pet.actualizarDatos(datos);
-        repository.save(pet);
-        return ResponseEntity.ok(pet);
+        Pet petActualizada = petService.actualizarMascota(id, datos);
+        return ResponseEntity.ok(petActualizada);
     }
 
     @DeleteMapping("/{id}")
-    @Transactional
-    public ResponseEntity<Pet> deletePet(@PathVariable Long id){
-        if(repository.existsById(id)){
-            repository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }
-        else{
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> deletePet(@PathVariable Long id){
+        petService.eliminarMascota(id);
+        return ResponseEntity.noContent().build();
     }
 }
