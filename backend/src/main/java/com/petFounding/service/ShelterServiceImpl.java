@@ -1,12 +1,14 @@
 package com.petFounding.service;
 
-
 import com.petFounding.entity.Pet;
 import com.petFounding.entity.Shelter;
 import com.petFounding.interfacee.ShelterService;
 import com.petFounding.repository.PetRepository;
 import com.petFounding.repository.ShelterRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +22,7 @@ public class ShelterServiceImpl implements ShelterService {
     private final PetRepository petRepository;
 
     @Autowired
-    public ShelterServiceImpl(ShelterRepository shelterRepository,
-                              PetRepository petRepository) {
+    public ShelterServiceImpl(ShelterRepository shelterRepository, PetRepository petRepository) {
         this.shelterRepository = shelterRepository;
         this.petRepository = petRepository;
     }
@@ -34,7 +35,7 @@ public class ShelterServiceImpl implements ShelterService {
     @Override
     public Shelter actualizarRefugio(Long id, Shelter refugio) {
         Shelter existente = shelterRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Refugio no encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Refugio no encontrado con ID: " + id));
 
         existente.setNombreRefugio(refugio.getNombreRefugio());
         existente.setDireccion(refugio.getDireccion());
@@ -44,54 +45,33 @@ public class ShelterServiceImpl implements ShelterService {
 
     @Override
     public void eliminarRefugio(Long id) {
+        if (!shelterRepository.existsById(id)) {
+            throw new EntityNotFoundException("No se puede eliminar: Refugio no encontrado.");
+        }
         shelterRepository.deleteById(id);
     }
 
     @Override
     public Shelter obtenerRefugioPorId(Long id) {
-        return shelterRepository.findById(id).orElse(null);
+        return shelterRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Refugio no encontrado."));
     }
 
     @Override
     public Shelter obtenerRefugioPorNombre(String nombre) {
-        return shelterRepository.findByNombreRefugio(nombre).orElse(null);
+        return shelterRepository.findByNombreRefugio(nombre)
+                .orElseThrow(() -> new EntityNotFoundException("Refugio con nombre " + nombre + " no encontrado."));
     }
 
     @Override
-    public List<Shelter> obtenerTodosLosRefugios() {
-        return shelterRepository.findAll();
-    }
-
-    @Override
-    public Pet crearMascota(Pet mascota, Long idRefugio) {
-        Shelter refugio = shelterRepository.findById(idRefugio)
-                .orElseThrow(() -> new RuntimeException("Refugio no encontrado"));
-
-        mascota.setRefugio(refugio);
-        return petRepository.save(mascota);
-    }
-
-    @Override
-    public Pet actualizarMascota(Long idMascota, Pet mascota) {
-        Pet existente = petRepository.findById(idMascota)
-                .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
-
-        existente.setNombre(mascota.getNombre());
-        existente.setRaza(mascota.getRaza());
-        existente.setEdad(mascota.getEdad());
-
-        return petRepository.save(existente);
-    }
-
-    @Override
-    public void eliminarMascota(Long idMascota) {
-        petRepository.deleteById(idMascota);
+    public Page<Shelter> obtenerTodosLosRefugios(Pageable paginacion) {
+        return shelterRepository.findAll(paginacion);
     }
 
     @Override
     public List<Pet> gestionarSolicitudes(Long idRefugio) {
         Shelter refugio = shelterRepository.findById(idRefugio)
-                .orElseThrow(() -> new RuntimeException("Refugio no encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Refugio no encontrado"));
 
         return petRepository.findByRefugio(refugio);
     }
@@ -99,6 +79,6 @@ public class ShelterServiceImpl implements ShelterService {
     @Override
     public void verReportes(Long idRefugio) {
         shelterRepository.findById(idRefugio)
-                .orElseThrow(() -> new RuntimeException("Refugio no encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Refugio no encontrado"));
     }
 }

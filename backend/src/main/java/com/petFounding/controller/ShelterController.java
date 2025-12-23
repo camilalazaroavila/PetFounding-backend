@@ -1,10 +1,8 @@
 package com.petFounding.controller;
 
 import com.petFounding.entity.Shelter;
-import com.petFounding.repository.ShelterRepository;
+import com.petFounding.interfacee.ShelterService;
 import com.petFounding.valid.ShelterValid;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,47 +19,38 @@ import java.net.URI;
 public class ShelterController {
 
     @Autowired
-    private ShelterRepository repository;
+    private ShelterService shelterService;
 
     @GetMapping
-    public ResponseEntity<Page<Shelter>> listShelters(@PageableDefault(size=6) Pageable pag){
-        return ResponseEntity.ok(repository.findAll(pag));
+    public ResponseEntity<Page<Shelter>> listShelters(@PageableDefault(size = 6, sort = "nombreRefugio") Pageable pag) {
+        return ResponseEntity.ok(shelterService.obtenerTodosLosRefugios(pag));
     }
 
     @PostMapping
-    @Transactional
     public ResponseEntity<Shelter> addShelter(@RequestBody @Valid ShelterValid datos, UriComponentsBuilder uriBuilder) {
-        Shelter shelter = repository.save(new Shelter(datos));
-        URI uri = uriBuilder.path("/shelters/{id}").buildAndExpand(shelter.getId()).toUri();
-        return ResponseEntity.created(uri).body(shelter);
+        Shelter shelter = new Shelter(datos);
+        Shelter shelterGuardado = shelterService.crearRefugio(shelter);
+
+        URI uri = uriBuilder.path("/shelter/{id}").buildAndExpand(shelterGuardado.getId()).toUri();
+        return ResponseEntity.created(uri).body(shelterGuardado);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Shelter> getShelter(@PathVariable Long id) {
-        Shelter shelter = repository.findById(id)
-                .orElseThrow(()->new EntityNotFoundException("Refugio no encontrado."));
+        Shelter shelter = shelterService.obtenerRefugioPorId(id);
         return ResponseEntity.ok(shelter);
     }
 
     @PutMapping("/{id}")
-    @Transactional
     public ResponseEntity<Shelter> updateShelter(@PathVariable Long id, @RequestBody @Valid ShelterValid datos) {
-        Shelter shelter = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Refugio no encontrado para actualizar"));
-        shelter.actualizarDatos(datos);
-        repository.save(shelter);
-        return ResponseEntity.ok(shelter);
+        Shelter nuevosDatos = new Shelter(datos);
+        Shelter shelterActualizado = shelterService.actualizarRefugio(id, nuevosDatos);
+        return ResponseEntity.ok(shelterActualizado);
     }
 
     @DeleteMapping("/{id}")
-    @Transactional
-    public ResponseEntity<Shelter> deleteShelter(@PathVariable Long id){
-        if(repository.existsById(id)){
-            repository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }
-        else{
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> deleteShelter(@PathVariable Long id) {
+        shelterService.eliminarRefugio(id);
+        return ResponseEntity.noContent().build();
     }
 }
