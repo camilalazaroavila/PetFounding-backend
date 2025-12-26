@@ -5,7 +5,7 @@ import com.petFounding.entity.Shelter;
 import com.petFounding.enumerator.AdoptionStatus;
 import com.petFounding.enumerator.Sex;
 import com.petFounding.enumerator.Size;
-import com.petFounding.interfacee.PetService;
+import com.petFounding.interfaceService.PetService;
 import com.petFounding.repository.PetRepository;
 import com.petFounding.repository.ShelterRepository;
 import com.petFounding.valid.PetValid;

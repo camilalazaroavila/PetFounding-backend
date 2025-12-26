@@ -4,8 +4,8 @@ import com.petFounding.entity.AdoptionApplication;
 import com.petFounding.entity.Pet;
 import com.petFounding.entity.User;
 import com.petFounding.enumerator.AdoptionStatus;
-import com.petFounding.exception.SolicitudDuplicadaException;
-import com.petFounding.interfacee.AdoptionApplicationService;
+import com.petFounding.infraestructure.exception.SolicitudDuplicadaException;
+import com.petFounding.interfaceService.AdoptionApplicationService;
 import com.petFounding.repository.AdoptionApplicationRepository;
 import com.petFounding.repository.PetRepository;
 import com.petFounding.repository.UserRepository;
@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service("adoptionApplicationService")
 @Transactional

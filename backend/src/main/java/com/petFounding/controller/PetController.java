@@ -1,7 +1,7 @@
 package com.petFounding.controller;
 
 import com.petFounding.entity.Pet;
-import com.petFounding.interfacee.PetService;
+import com.petFounding.interfaceService.PetService;
 import com.petFounding.valid.PetValid;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

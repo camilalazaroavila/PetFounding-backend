@@ -1,4 +1,4 @@
-package com.petFounding.interfacee;
+package com.petFounding.interfaceService;
 
 import com.petFounding.entity.Donation;
 import com.petFounding.entity.Shelter;
@@ -7,7 +7,6 @@ import com.petFounding.entity.User;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface DonationService {
     Donation processar(Donation donacion);

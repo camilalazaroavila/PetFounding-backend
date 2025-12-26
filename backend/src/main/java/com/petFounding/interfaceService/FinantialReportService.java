@@ -1,4 +1,4 @@
-package com.petFounding.interfacee;
+package com.petFounding.interfaceService;
 
 import com.petFounding.entity.FinancialReport;
 import com.petFounding.entity.Shelter;

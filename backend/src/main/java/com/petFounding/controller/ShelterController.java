@@ -1,7 +1,7 @@
 package com.petFounding.controller;
 
 import com.petFounding.entity.Shelter;
-import com.petFounding.interfacee.ShelterService;
+import com.petFounding.interfaceService.ShelterService;
 import com.petFounding.valid.ShelterValid;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

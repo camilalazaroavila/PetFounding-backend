@@ -1,6 +1,6 @@
 package com.petFounding.infraestructure.errors;
 
-import com.petFounding.exception.SolicitudDuplicadaException;
+import com.petFounding.infraestructure.exception.SolicitudDuplicadaException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
 import org.springframework.http.ResponseEntity;

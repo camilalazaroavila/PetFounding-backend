@@ -4,7 +4,7 @@ import com.petFounding.entity.AdoptionApplication;
 import com.petFounding.entity.AdoptionReport;
 import com.petFounding.entity.FinancialReport;
 import com.petFounding.entity.Shelter;
-import com.petFounding.interfacee.AdoptionReportService;
+import com.petFounding.interfaceService.AdoptionReportService;
 import com.petFounding.repository.AdoptionApplicationRepository;
 import com.petFounding.repository.AdoptionReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;

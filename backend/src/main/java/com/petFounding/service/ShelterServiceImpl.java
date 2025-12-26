@@ -2,7 +2,7 @@ package com.petFounding.service;
 
 import com.petFounding.entity.Pet;
 import com.petFounding.entity.Shelter;
-import com.petFounding.interfacee.ShelterService;
+import com.petFounding.interfaceService.ShelterService;
 import com.petFounding.repository.PetRepository;
 import com.petFounding.repository.ShelterRepository;
 import com.petFounding.valid.ShelterValid;

@@ -3,7 +3,7 @@ package com.petFounding.controller;
 import com.petFounding.entity.AdoptionApplication;
 import com.petFounding.entity.Pet;
 import com.petFounding.entity.User;
-import com.petFounding.interfacee.AdoptionApplicationService;
+import com.petFounding.interfaceService.AdoptionApplicationService;
 import com.petFounding.valid.AdoptionApplicationValid;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

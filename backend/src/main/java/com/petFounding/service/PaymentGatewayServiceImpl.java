@@ -2,7 +2,7 @@ package com.petFounding.service;
 
 import com.petFounding.entity.Donation;
 import com.petFounding.entity.PaymentGateway;
-import com.petFounding.interfacee.PaymentGatewayService;
+import com.petFounding.interfaceService.PaymentGatewayService;
 import com.petFounding.repository.PaymentGatewayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

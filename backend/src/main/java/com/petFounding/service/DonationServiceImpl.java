@@ -3,7 +3,7 @@ package com.petFounding.service;
 import com.petFounding.entity.Donation;
 import com.petFounding.entity.Shelter;
 import com.petFounding.entity.User;
-import com.petFounding.interfacee.DonationService;
+import com.petFounding.interfaceService.DonationService;
 import com.petFounding.repository.DonationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

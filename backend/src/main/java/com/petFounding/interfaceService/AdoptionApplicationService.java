@@ -1,4 +1,4 @@
-package com.petFounding.interfacee;
+package com.petFounding.interfaceService;
 
 import com.petFounding.entity.AdoptionApplication;
 import com.petFounding.entity.Pet;
