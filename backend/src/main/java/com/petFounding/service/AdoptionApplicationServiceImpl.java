@@ -4,9 +4,13 @@ import com.petFounding.entity.AdoptionApplication;
 import com.petFounding.entity.Pet;
 import com.petFounding.entity.User;
 import com.petFounding.enumerator.AdoptionStatus;
-import com.petFounding.interfacee.AdoptionApplicationService;
+import com.petFounding.infraestructure.exception.SolicitudDuplicadaException;
+import com.petFounding.interfaceService.AdoptionApplicationService;
 import com.petFounding.repository.AdoptionApplicationRepository;
 import com.petFounding.repository.PetRepository;
+import com.petFounding.repository.UserRepository;
+import com.petFounding.valid.AdoptionApplicationValid;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,22 +24,35 @@ public class AdoptionApplicationServiceImpl implements AdoptionApplicationServic
 
     private final AdoptionApplicationRepository adoptionApplicationRepository;
     private final PetRepository petRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public AdoptionApplicationServiceImpl(AdoptionApplicationRepository adoptionApplicationRepository,
-                                          PetRepository petRepository) {
+    public AdoptionApplicationServiceImpl
+            (AdoptionApplicationRepository adoptionApplicationRepository,
+             PetRepository petRepository,
+             UserRepository userRepository) {
         this.adoptionApplicationRepository = adoptionApplicationRepository;
         this.petRepository = petRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public AdoptionApplication crear(AdoptionApplication solicitud) {
-        if (adoptionApplicationRepository.existsByAdoptanteAndMascota(
-                solicitud.getAdoptante(), solicitud.getMascota())) {
-            throw new RuntimeException("Ya existe una solicitud para esta mascota");
+    public AdoptionApplication crear(AdoptionApplicationValid datos) {
+        Pet mascota = petRepository.findById(datos.idMascota())
+                .orElseThrow(() -> new EntityNotFoundException("Mascota no encontrada"));
+
+        User adoptante = userRepository.findById(datos.idAdoptante())
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+
+        if (existeSolicitud(adoptante,mascota)) {
+            throw new SolicitudDuplicadaException("Ya existe una solicitud de este usuario para esta mascota");
         }
 
+        AdoptionApplication solicitud = new AdoptionApplication();
+        solicitud.setMascota(mascota);
+        solicitud.setAdoptante(adoptante);
         solicitud.setFechaSolicitud(LocalDate.now());
+
         return adoptionApplicationRepository.save(solicitud);
     }
 

@@ -1,10 +1,10 @@
 package com.petFounding.service;
 
 import com.petFounding.entity.User;
-import com.petFounding.exception.MailIncorrectoException;
-import com.petFounding.exception.MailRepetidoException;
-import com.petFounding.exception.UsuarioInexistenteException;
-import com.petFounding.interfacee.UserService;
+import com.petFounding.infraestructure.exception.MailIncorrectoException;
+import com.petFounding.infraestructure.exception.MailRepetidoException;
+import com.petFounding.infraestructure.exception.UsuarioInexistenteException;
+import com.petFounding.interfaceService.UserService;
 import com.petFounding.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

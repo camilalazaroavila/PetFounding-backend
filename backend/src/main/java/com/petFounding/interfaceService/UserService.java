@@ -1,10 +1,10 @@
-package com.petFounding.interfacee;
+package com.petFounding.interfaceService;
 
 
 import com.petFounding.entity.User;
-import com.petFounding.exception.MailIncorrectoException;
-import com.petFounding.exception.MailRepetidoException;
-import com.petFounding.exception.UsuarioInexistenteException;
+import com.petFounding.infraestructure.exception.MailIncorrectoException;
+import com.petFounding.infraestructure.exception.MailRepetidoException;
+import com.petFounding.infraestructure.exception.UsuarioInexistenteException;
 
 import java.util.List;
 
@@ -17,4 +17,4 @@ public interface UserService {
         User obtenerUsuarioPorEmail(String email) throws UsuarioInexistenteException;
         List<User> obtenerTodosLosUsuarios();
         Boolean existeEmail(String email);
-    }
+}

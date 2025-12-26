@@ -1,4 +1,4 @@
-package com.petFounding.exception;
+package com.petFounding.infraestructure.exception;
 
 public class MailRepetidoException extends Exception {
 

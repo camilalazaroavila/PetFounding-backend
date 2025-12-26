@@ -3,7 +3,7 @@ package com.petFounding.service;
 import com.petFounding.entity.Donation;
 import com.petFounding.entity.FinancialReport;
 import com.petFounding.entity.Shelter;
-import com.petFounding.interfacee.FinantialReportService;
+import com.petFounding.interfaceService.FinantialReportService;
 import com.petFounding.repository.DonationRepository;
 import com.petFounding.repository.FinancialReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;

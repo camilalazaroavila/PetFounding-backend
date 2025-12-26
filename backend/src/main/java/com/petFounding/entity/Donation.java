@@ -1,5 +1,6 @@
 package com.petFounding.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ public class Donation {
     @JoinColumn(name = "id_usuario")
     private User usuario;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "donacion", cascade = CascadeType.ALL)
     private List<PaymentGateway> pasarelas = new ArrayList<>();
 

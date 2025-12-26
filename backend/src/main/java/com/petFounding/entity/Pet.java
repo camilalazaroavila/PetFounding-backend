@@ -1,5 +1,6 @@
 package com.petFounding.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.petFounding.enumerator.AdoptionStatus;
 import com.petFounding.enumerator.Sex;
 import com.petFounding.enumerator.Size;
