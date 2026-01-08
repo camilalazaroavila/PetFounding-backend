@@ -16,4 +16,6 @@ public interface AdoptionApplicationService {
     List<AdoptionApplication> obtenerSolicitudesPorAdoptante(User adoptante);
     List<AdoptionApplication> obtenerSolicitudesPorMascota(Pet mascota);
     Boolean existeSolicitud(User adoptante, Pet mascota);
+    List<AdoptionApplication> listarTodas();
+    List<AdoptionApplication> obtenerPendientes();
 }

@@ -109,4 +109,14 @@ public class AdoptionApplicationServiceImpl implements AdoptionApplicationServic
     public Boolean existeSolicitud(User adoptante, Pet mascota) {
         return adoptionApplicationRepository.existsByAdoptanteAndMascota(adoptante, mascota);
     }
+
+    @Override
+    public List<AdoptionApplication> listarTodas() {
+        return List.of();
+    }
+
+    @Override
+    public List<AdoptionApplication> obtenerPendientes() {
+        return List.of();
+    }
 }

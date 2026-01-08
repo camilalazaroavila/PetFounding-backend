@@ -82,4 +82,19 @@ public class DonationServiceImpl implements DonationService {
                 .map(Donation::getMonto)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
+    @Override
+    public List<Donation> listarTodas() {
+        return List.of();
+    }
+
+    @Override
+    public List<Donation> obtenerPorUsuario(User usuario) {
+        return List.of();
+    }
+
+    @Override
+    public List<Donation> obtenerPorRefugio(Shelter refugio) {
+        return List.of();
+    }
 }

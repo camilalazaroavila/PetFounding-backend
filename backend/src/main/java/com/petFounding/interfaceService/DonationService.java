@@ -17,5 +17,8 @@ public interface DonationService {
     List<Donation> obtenerDonacionesPorRefugio(Shelter refugio);
     List<Donation> obtenerDonacionesPorFecha(LocalDate fechaInicio, LocalDate fechaFin);
     BigDecimal calcularTotalRecaudado(Shelter refugio);
+    List<Donation> listarTodas();
+    List<Donation> obtenerPorUsuario(User usuario);
+    List<Donation> obtenerPorRefugio(Shelter refugio);
 }
 

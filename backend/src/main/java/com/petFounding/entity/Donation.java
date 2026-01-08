@@ -43,4 +43,10 @@ public class Donation {
         this.metodoPago = metodoPago;
         this.comentario = comentario;
     }
+
+    public void setMetodoDePago(String mercadoPago) {
+    }
+
+    public void setMensaje(String s) {
+    }
 }
